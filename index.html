@@ -252,7 +252,7 @@
         <button onclick="resetCode()">Reset</button>
         <button class="done-btn" id="doneBtn" onclick="toggleDone()">Mark done</button>
         <button class="ans-btn" id="ansBtn" onclick="toggleAnswer()">📖 Show answer</button>
-        <span class="hint">Code auto-saves in your browser</span>
+        <span class="hint">Select code to run just that part · auto-saves</span>
       </div>
       <textarea id="code" spellcheck="false" placeholder="// Write your solution here, then click Run"></textarea>
       <div class="ac-pop" id="acPop"></div>
@@ -468,7 +468,11 @@
   async function runCode() {
     saveCode();
     clearConsole();
-    const code = $('#code').value;
+    // Run only the selected text if any is highlighted (like a SQL client); else run everything.
+    const ta = $('#code');
+    const hasSel = ta.selectionStart !== ta.selectionEnd;
+    const code = hasSel ? ta.value.slice(ta.selectionStart, ta.selectionEnd) : ta.value;
+    if (hasSel) appendLine('▸ running selection', 'log-info');
     const capture = {
       log: (...a) => appendLine(a.map(fmt).join(' ')),
       error: (...a) => appendLine(a.map(fmt).join(' '), 'log-err'),
