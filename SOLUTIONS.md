@@ -13,11 +13,11 @@
 ### 1. Sum all numbers
 ```js
 // Beginner
-function sum(arr) {
+const sum = arr => {
   let total = 0;
   for (let i = 0; i < arr.length; i++) total += arr[i];
   return total;
-}
+};
 
 // Expert
 const sum = arr => arr.reduce((a, b) => a + b, 0);
@@ -27,11 +27,11 @@ const sum = arr => arr.reduce((a, b) => a + b, 0);
 ### 2. Maximum number
 ```js
 // Beginner
-function max(arr) {
+const max = arr => {
   let m = arr[0];
   for (let i = 1; i < arr.length; i++) if (arr[i] > m) m = arr[i];
   return m;
-}
+};
 
 // Expert
 const max = arr => Math.max(...arr);
@@ -41,11 +41,11 @@ const max = arr => Math.max(...arr);
 ### 3. Minimum number
 ```js
 // Beginner
-function min(arr) {
+const min = arr => {
   let m = arr[0];
   for (let i = 1; i < arr.length; i++) if (arr[i] < m) m = arr[i];
   return m;
-}
+};
 
 // Expert
 const min = arr => Math.min(...arr);
@@ -55,11 +55,11 @@ const min = arr => Math.min(...arr);
 ### 4. Average
 ```js
 // Beginner
-function avg(arr) {
+const avg = arr => {
   let total = 0;
   for (let i = 0; i < arr.length; i++) total += arr[i];
   return total / arr.length;
-}
+};
 
 // Expert
 const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
@@ -69,29 +69,29 @@ const avg = arr => arr.reduce((a, b) => a + b, 0) / arr.length;
 ### 5. Reverse without .reverse()
 ```js
 // Beginner
-function reverse(arr) {
+const reverse = arr => {
   const out = [];
   for (let i = arr.length - 1; i >= 0; i--) out.push(arr[i]);
   return out;
-}
+};
 
 // Expert — two-pointer in place, O(1) extra space
-function reverse(arr) {
+const reverse = arr => {
   let l = 0, r = arr.length - 1;
   while (l < r) { [arr[l], arr[r]] = [arr[r], arr[l]]; l++; r--; }
   return arr;
-}
+};
 ```
 **Why:** Expert uses the **two-pointer** pattern (huge in DSA) and destructuring swap — no extra array.
 
 ### 6. Count evens
 ```js
 // Beginner
-function countEven(arr) {
+const countEven = arr => {
   let c = 0;
   for (let i = 0; i < arr.length; i++) if (arr[i] % 2 === 0) c++;
   return c;
-}
+};
 
 // Expert
 const countEven = arr => arr.filter(n => n % 2 === 0).length;
@@ -101,11 +101,11 @@ const countEven = arr => arr.filter(n => n % 2 === 0).length;
 ### 7. Filter odds
 ```js
 // Beginner
-function odds(arr) {
+const odds = arr => {
   const out = [];
   for (let i = 0; i < arr.length; i++) if (arr[i] % 2 !== 0) out.push(arr[i]);
   return out;
-}
+};
 
 // Expert
 const odds = arr => arr.filter(n => n % 2 !== 0);
@@ -115,11 +115,11 @@ const odds = arr => arr.filter(n => n % 2 !== 0);
 ### 8. Double every number
 ```js
 // Beginner
-function double(arr) {
+const double = arr => {
   const out = [];
   for (let i = 0; i < arr.length; i++) out.push(arr[i] * 2);
   return out;
-}
+};
 
 // Expert
 const double = arr => arr.map(n => n * 2);
@@ -129,11 +129,11 @@ const double = arr => arr.map(n => n * 2);
 ### 9. Remove duplicates
 ```js
 // Beginner
-function unique(arr) {
+const unique = arr => {
   const out = [];
   for (let i = 0; i < arr.length; i++) if (!out.includes(arr[i])) out.push(arr[i]);
   return out;
-}
+};
 
 // Expert — O(n) using a Set
 const unique = arr => [...new Set(arr)];
@@ -143,30 +143,30 @@ const unique = arr => [...new Set(arr)];
 ### 10. Second largest
 ```js
 // Beginner
-function secondLargest(arr) {
+const secondLargest = arr => {
   const sorted = [...arr].sort((a, b) => b - a);
   return sorted[1];
-}
+};
 
 // Expert — single pass, O(n), handles duplicates
-function secondLargest(arr) {
+const secondLargest = arr => {
   let first = -Infinity, second = -Infinity;
   for (const n of arr) {
     if (n > first) { second = first; first = n; }
     else if (n > second && n < first) second = n;
   }
   return second;
-}
+};
 ```
 **Why:** Sorting is O(n log n); a single pass is O(n) and avoids copying/sorting.
 
 ### 11. Contains value
 ```js
 // Beginner
-function contains(arr, val) {
+const contains = (arr, val) => {
   for (let i = 0; i < arr.length; i++) if (arr[i] === val) return true;
   return false;
-}
+};
 
 // Expert
 const contains = (arr, val) => arr.includes(val);
@@ -176,12 +176,12 @@ const contains = (arr, val) => arr.includes(val);
 ### 12. Merge two arrays
 ```js
 // Beginner
-function merge(a, b) {
+const merge = (a, b) => {
   const out = [];
   for (let i = 0; i < a.length; i++) out.push(a[i]);
   for (let i = 0; i < b.length; i++) out.push(b[i]);
   return out;
-}
+};
 
 // Expert
 const merge = (a, b) => [...a, ...b];
@@ -191,10 +191,10 @@ const merge = (a, b) => [...a, ...b];
 ### 13. Index of first even
 ```js
 // Beginner
-function firstEvenIndex(arr) {
+const firstEvenIndex = arr => {
   for (let i = 0; i < arr.length; i++) if (arr[i] % 2 === 0) return i;
   return -1;
-}
+};
 
 // Expert
 const firstEvenIndex = arr => arr.findIndex(n => n % 2 === 0);
@@ -204,11 +204,11 @@ const firstEvenIndex = arr => arr.findIndex(n => n % 2 === 0);
 ### 14. Count occurrences
 ```js
 // Beginner
-function count(arr, target) {
+const count = (arr, target) => {
   let c = 0;
   for (let i = 0; i < arr.length; i++) if (arr[i] === target) c++;
   return c;
-}
+};
 
 // Expert
 const count = (arr, target) => arr.filter(x => x === target).length;
@@ -218,11 +218,11 @@ const count = (arr, target) => arr.filter(x => x === target).length;
 ### 15. Square each
 ```js
 // Beginner
-function squares(arr) {
+const squares = arr => {
   const out = [];
   for (let i = 0; i < arr.length; i++) out.push(arr[i] ** 2);
   return out;
-}
+};
 
 // Expert
 const squares = arr => arr.map(n => n ** 2);
@@ -232,11 +232,11 @@ const squares = arr => arr.map(n => n ** 2);
 ### 16. Sum of positives
 ```js
 // Beginner
-function sumPositive(arr) {
+const sumPositive = arr => {
   let total = 0;
   for (let i = 0; i < arr.length; i++) if (arr[i] > 0) total += arr[i];
   return total;
-}
+};
 
 // Expert
 const sumPositive = arr => arr.filter(n => n > 0).reduce((a, b) => a + b, 0);
@@ -246,12 +246,12 @@ const sumPositive = arr => arr.filter(n => n > 0).reduce((a, b) => a + b, 0);
 ### 17. Flatten 2D
 ```js
 // Beginner
-function flatten(arr) {
+const flatten = arr => {
   const out = [];
   for (let i = 0; i < arr.length; i++)
     for (let j = 0; j < arr[i].length; j++) out.push(arr[i][j]);
   return out;
-}
+};
 
 // Expert
 const flatten = arr => arr.flat();
@@ -261,12 +261,12 @@ const flatten = arr => arr.flat();
 ### 18. Rotate right by 1
 ```js
 // Beginner
-function rotate(arr) {
+const rotate = arr => {
   const last = arr[arr.length - 1];
   const out = [last];
   for (let i = 0; i < arr.length - 1; i++) out.push(arr[i]);
   return out;
-}
+};
 
 // Expert
 const rotate = arr => [arr[arr.length - 1], ...arr.slice(0, -1)];
@@ -276,48 +276,48 @@ const rotate = arr => [arr[arr.length - 1], ...arr.slice(0, -1)];
 ### 19. Intersection
 ```js
 // Beginner
-function intersect(a, b) {
+const intersect = (a, b) => {
   const out = [];
   for (let i = 0; i < a.length; i++) if (b.includes(a[i])) out.push(a[i]);
   return out;
-}
+};
 
 // Expert — O(n+m) using a Set
-function intersect(a, b) {
+const intersect = (a, b) => {
   const set = new Set(b);
   return a.filter(x => set.has(x));
-}
+};
 ```
 **Why:** Beginner is O(n*m). Set membership is O(1), so overall O(n+m).
 
 ### 20. Move zeros to end
 ```js
 // Beginner
-function moveZeros(arr) {
+const moveZeros = arr => {
   const out = [];
   for (const n of arr) if (n !== 0) out.push(n);
   while (out.length < arr.length) out.push(0);
   return out;
-}
+};
 
 // Expert — in place, two-pointer
-function moveZeros(arr) {
+const moveZeros = arr => {
   let insert = 0;
   for (const n of arr) if (n !== 0) arr[insert++] = n;
   while (insert < arr.length) arr[insert++] = 0;
   return arr;
-}
+};
 ```
 **Why:** Expert modifies in place (O(1) extra space) — classic LeetCode pattern.
 
 ### 21. Product of all
 ```js
 // Beginner
-function product(arr) {
+const product = arr => {
   let p = 1;
   for (let i = 0; i < arr.length; i++) p *= arr[i];
   return p;
-}
+};
 
 // Expert
 const product = arr => arr.reduce((a, b) => a * b, 1);
@@ -327,7 +327,7 @@ const product = arr => arr.reduce((a, b) => a * b, 1);
 ### 22. Chunk into groups of N
 ```js
 // Beginner
-function chunk(arr, n) {
+const chunk = (arr, n) => {
   const out = [];
   let group = [];
   for (let i = 0; i < arr.length; i++) {
@@ -336,63 +336,63 @@ function chunk(arr, n) {
   }
   if (group.length) out.push(group);
   return out;
-}
+};
 
 // Expert
-function chunk(arr, n) {
+const chunk = (arr, n) => {
   const out = [];
   for (let i = 0; i < arr.length; i += n) out.push(arr.slice(i, i + n));
   return out;
-}
+};
 ```
 **Why:** Stepping the loop by `n` + `slice` is cleaner and avoids the temp group.
 
 ### 23. Cumulative sum
 ```js
 // Beginner
-function cumulative(arr) {
+const cumulative = arr => {
   const out = [];
   let running = 0;
   for (let i = 0; i < arr.length; i++) { running += arr[i]; out.push(running); }
   return out;
-}
+};
 
 // Expert
-function cumulative(arr) {
+const cumulative = arr => {
   let running = 0;
   return arr.map(n => (running += n));
-}
+};
 ```
 **Why:** `map` with an accumulator variable is compact (still clear).
 
 ### 24. Difference (A not in B)
 ```js
 // Beginner
-function diff(a, b) {
+const diff = (a, b) => {
   const out = [];
   for (const x of a) if (!b.includes(x)) out.push(x);
   return out;
-}
+};
 
 // Expert
-function diff(a, b) {
+const diff = (a, b) => {
   const set = new Set(b);
   return a.filter(x => !set.has(x));
-}
+};
 ```
 **Why:** Set makes the lookup O(1) instead of scanning `b` each time.
 
 ### 25. Group by even/odd
 ```js
 // Beginner
-function groupParity(arr) {
+const groupParity = arr => {
   const result = { even: [], odd: [] };
   for (const n of arr) {
     if (n % 2 === 0) result.even.push(n);
     else result.odd.push(n);
   }
   return result;
-}
+};
 
 // Expert
 const groupParity = arr =>
@@ -410,11 +410,11 @@ const groupParity = arr =>
 ### 26. Reverse a string
 ```js
 // Beginner
-function reverse(str) {
+const reverse = str => {
   let out = "";
   for (let i = str.length - 1; i >= 0; i--) out += str[i];
   return out;
-}
+};
 
 // Expert
 const reverse = str => [...str].reverse().join("");
@@ -424,29 +424,29 @@ const reverse = str => [...str].reverse().join("");
 ### 27. Palindrome check
 ```js
 // Beginner
-function isPalindrome(str) {
+const isPalindrome = str => {
   const rev = str.split("").reverse().join("");
   return str === rev;
-}
+};
 
 // Expert — two-pointer, no extra string
-function isPalindrome(str) {
+const isPalindrome = str => {
   let l = 0, r = str.length - 1;
   while (l < r) if (str[l++] !== str[r--]) return false;
   return true;
-}
+};
 ```
 **Why:** Two-pointer avoids building a reversed copy; O(1) space, early exit.
 
 ### 28. Count vowels
 ```js
 // Beginner
-function countVowels(str) {
+const countVowels = str => {
   let c = 0;
   const vowels = "aeiou";
   for (const ch of str.toLowerCase()) if (vowels.includes(ch)) c++;
   return c;
-}
+};
 
 // Expert
 const countVowels = str => (str.match(/[aeiou]/gi) || []).length;
@@ -456,12 +456,12 @@ const countVowels = str => (str.match(/[aeiou]/gi) || []).length;
 ### 29. Capitalize each word
 ```js
 // Beginner
-function titleCase(str) {
+const titleCase = str => {
   const words = str.split(" ");
   const out = [];
   for (const w of words) out.push(w[0].toUpperCase() + w.slice(1));
   return out.join(" ");
-}
+};
 
 // Expert
 const titleCase = str =>
@@ -472,14 +472,14 @@ const titleCase = str =>
 ### 30. Count each character
 ```js
 // Beginner
-function charCount(str) {
+const charCount = str => {
   const counts = {};
   for (const ch of str) {
     if (counts[ch]) counts[ch]++;
     else counts[ch] = 1;
   }
   return counts;
-}
+};
 
 // Expert
 const charCount = str =>
@@ -490,33 +490,33 @@ const charCount = str =>
 ### 31. First non-repeating char
 ```js
 // Beginner
-function firstUnique(str) {
+const firstUnique = str => {
   for (let i = 0; i < str.length; i++) {
     if (str.indexOf(str[i]) === str.lastIndexOf(str[i])) return str[i];
   }
   return null;
-}
+};
 
 // Expert — count with a Map, then find first with count 1
-function firstUnique(str) {
+const firstUnique = str => {
   const counts = {};
   for (const ch of str) counts[ch] = (counts[ch] || 0) + 1;
   for (const ch of str) if (counts[ch] === 1) return ch;
   return null;
-}
+};
 ```
 **Why:** Beginner is O(n²) (indexOf scans). Two passes with a map = O(n).
 
 ### 32. Anagram check
 ```js
 // Beginner
-function isAnagram(a, b) {
+const isAnagram = (a, b) => {
   const sortStr = s => s.split("").sort().join("");
   return sortStr(a) === sortStr(b);
-}
+};
 
 // Expert — count characters, O(n)
-function isAnagram(a, b) {
+const isAnagram = (a, b) => {
   if (a.length !== b.length) return false;
   const counts = {};
   for (const ch of a) counts[ch] = (counts[ch] || 0) + 1;
@@ -525,18 +525,18 @@ function isAnagram(a, b) {
     counts[ch]--;
   }
   return true;
-}
+};
 ```
 **Why:** Sorting is O(n log n); the count-map version is O(n).
 
 ### 33. Remove whitespace
 ```js
 // Beginner
-function removeSpaces(str) {
+const removeSpaces = str => {
   let out = "";
   for (const ch of str) if (ch !== " ") out += ch;
   return out;
-}
+};
 
 // Expert
 const removeSpaces = str => str.replace(/\s/g, "");
@@ -546,9 +546,9 @@ const removeSpaces = str => str.replace(/\s/g, "");
 ### 34. Count words
 ```js
 // Beginner
-function wordCount(str) {
+const wordCount = str => {
   return str.split(" ").length;
-}
+};
 
 // Expert — handles multiple/leading/trailing spaces
 const wordCount = str => str.trim().split(/\s+/).filter(Boolean).length;
@@ -558,12 +558,12 @@ const wordCount = str => str.trim().split(/\s+/).filter(Boolean).length;
 ### 35. Longest word
 ```js
 // Beginner
-function longestWord(str) {
+const longestWord = str => {
   const words = str.split(" ");
   let longest = "";
   for (const w of words) if (w.length > longest.length) longest = w;
   return longest;
-}
+};
 
 // Expert
 const longestWord = str =>
@@ -574,11 +574,11 @@ const longestWord = str =>
 ### 36. Replace spaces with dashes
 ```js
 // Beginner
-function dashify(str) {
+const dashify = str => {
   let out = "";
   for (const ch of str) out += ch === " " ? "-" : ch;
   return out;
-}
+};
 
 // Expert
 const dashify = str => str.replaceAll(" ", "-");
@@ -588,10 +588,10 @@ const dashify = str => str.replaceAll(" ", "-");
 ### 37. Only digits?
 ```js
 // Beginner
-function isDigits(str) {
+const isDigits = str => {
   for (const ch of str) if (ch < "0" || ch > "9") return false;
   return str.length > 0;
-}
+};
 
 // Expert
 const isDigits = str => /^\d+$/.test(str);
@@ -601,16 +601,16 @@ const isDigits = str => /^\d+$/.test(str);
 ### 38. Most frequent character
 ```js
 // Beginner
-function mostFrequent(str) {
+const mostFrequent = str => {
   const counts = {};
   for (const ch of str) counts[ch] = (counts[ch] || 0) + 1;
   let best = "", max = 0;
   for (const ch in counts) if (counts[ch] > max) { max = counts[ch]; best = ch; }
   return best;
-}
+};
 
 // Expert
-function mostFrequent(str) {
+const mostFrequent = str => {
   const counts = {};
   let best = "", max = 0;
   for (const ch of str) {
@@ -618,17 +618,17 @@ function mostFrequent(str) {
     if (counts[ch] > max) { max = counts[ch]; best = ch; }
   }
   return best;
-}
+};
 ```
 **Why:** Expert tracks the max in the same pass — one loop instead of two.
 
 ### 39. Truncate with "..."
 ```js
 // Beginner
-function truncate(str, n) {
+const truncate = (str, n) => {
   if (str.length <= n) return str;
   return str.slice(0, n) + "...";
-}
+};
 
 // Expert — same, but a clean guard/ternary
 const truncate = (str, n) => (str.length <= n ? str : str.slice(0, n) + "...");
@@ -638,14 +638,14 @@ const truncate = (str, n) => (str.length <= n ? str : str.slice(0, n) + "...");
 ### 40. Count upper/lower
 ```js
 // Beginner
-function caseCount(str) {
+const caseCount = str => {
   let upper = 0, lower = 0;
   for (const ch of str) {
     if (ch >= "A" && ch <= "Z") upper++;
     else if (ch >= "a" && ch <= "z") lower++;
   }
   return { upper, lower };
-}
+};
 
 // Expert
 const caseCount = str => ({
@@ -658,12 +658,12 @@ const caseCount = str => ({
 ### 41. Reverse word order
 ```js
 // Beginner
-function reverseWords(str) {
+const reverseWords = str => {
   const words = str.split(" ");
   const out = [];
   for (let i = words.length - 1; i >= 0; i--) out.push(words[i]);
   return out.join(" ");
-}
+};
 
 // Expert
 const reverseWords = str => str.split(" ").reverse().join(" ");
@@ -673,14 +673,14 @@ const reverseWords = str => str.split(" ").reverse().join(" ");
 ### 42. Rotation check
 ```js
 // Beginner
-function isRotation(a, b) {
+const isRotation = (a, b) => {
   if (a.length !== b.length) return false;
   for (let i = 0; i < a.length; i++) {
     const rotated = a.slice(i) + a.slice(0, i);
     if (rotated === b) return true;
   }
   return false;
-}
+};
 
 // Expert — the classic (a+a) contains b trick
 const isRotation = (a, b) => a.length === b.length && (a + a).includes(b);
@@ -690,7 +690,7 @@ const isRotation = (a, b) => a.length === b.length && (a + a).includes(b);
 ### 43. Title case ignoring small words
 ```js
 // Beginner
-function titleCaseSmart(str) {
+const titleCaseSmart = str => {
   const small = ["a", "the", "of", "and", "in"];
   const words = str.toLowerCase().split(" ");
   const out = [];
@@ -700,42 +700,42 @@ function titleCaseSmart(str) {
     else out.push(w[0].toUpperCase() + w.slice(1));
   }
   return out.join(" ");
-}
+};
 
 // Expert
-function titleCaseSmart(str) {
+const titleCaseSmart = str => {
   const small = new Set(["a", "the", "of", "and", "in"]);
   return str.toLowerCase().split(" ")
     .map((w, i) => (i !== 0 && small.has(w) ? w : w[0].toUpperCase() + w.slice(1)))
     .join(" ");
-}
+};
 ```
 **Why:** `Set` for O(1) membership + `map` with index; first word always capitalized.
 
 ### 44. Duplicate characters
 ```js
 // Beginner
-function duplicates(str) {
+const duplicates = str => {
   const counts = {};
   for (const ch of str) counts[ch] = (counts[ch] || 0) + 1;
   const out = [];
   for (const ch in counts) if (counts[ch] > 1) out.push(ch);
   return out;
-}
+};
 
 // Expert
-function duplicates(str) {
+const duplicates = str => {
   const seen = new Set(), dup = new Set();
   for (const ch of str) (seen.has(ch) ? dup : seen).add(ch);
   return [...dup];
-}
+};
 ```
 **Why:** Two Sets track "seen" vs "duplicate" in a single pass.
 
 ### 45. Run-length encoding
 ```js
 // Beginner
-function encode(str) {
+const encode = str => {
   let out = "";
   let i = 0;
   while (i < str.length) {
@@ -745,12 +745,12 @@ function encode(str) {
     i++;
   }
   return out;
-}
+};
 
 // Expert
-function encode(str) {
+const encode = str => {
   return str.replace(/(.)\1*/g, m => m[0] + m.length);
-}
+};
 ```
 **Why:** Regex `(.)\1*` matches runs of the same char; beginner version is clearer to reason about.
 
@@ -761,14 +761,14 @@ function encode(str) {
 ### 46. Frequency map from array
 ```js
 // Beginner
-function freq(arr) {
+const freq = arr => {
   const counts = {};
   for (const item of arr) {
     if (counts[item]) counts[item]++;
     else counts[item] = 1;
   }
   return counts;
-}
+};
 
 // Expert
 const freq = arr => arr.reduce((acc, x) => (acc[x] = (acc[x] || 0) + 1, acc), {});
@@ -778,12 +778,12 @@ const freq = arr => arr.reduce((acc, x) => (acc[x] = (acc[x] || 0) + 1, acc), {}
 ### 47. Merge objects
 ```js
 // Beginner
-function merge(a, b) {
+const merge = (a, b) => {
   const out = {};
   for (const k in a) out[k] = a[k];
   for (const k in b) out[k] = b[k];
   return out;
-}
+};
 
 // Expert
 const merge = (a, b) => ({ ...a, ...b });
@@ -793,11 +793,11 @@ const merge = (a, b) => ({ ...a, ...b });
 ### 48. Keys as array
 ```js
 // Beginner
-function keys(obj) {
+const keys = obj => {
   const out = [];
   for (const k in obj) out.push(k);
   return out;
-}
+};
 
 // Expert
 const keys = obj => Object.keys(obj);
@@ -807,11 +807,11 @@ const keys = obj => Object.keys(obj);
 ### 49. Values as array
 ```js
 // Beginner
-function values(obj) {
+const values = obj => {
   const out = [];
   for (const k in obj) out.push(obj[k]);
   return out;
-}
+};
 
 // Expert
 const values = obj => Object.values(obj);
@@ -821,11 +821,11 @@ const values = obj => Object.values(obj);
 ### 50. Invert object
 ```js
 // Beginner
-function invert(obj) {
+const invert = obj => {
   const out = {};
   for (const k in obj) out[obj[k]] = k;
   return out;
-}
+};
 
 // Expert
 const invert = obj =>
@@ -836,11 +836,11 @@ const invert = obj =>
 ### 51. Key with highest value
 ```js
 // Beginner
-function maxKey(obj) {
+const maxKey = obj => {
   let best = null, max = -Infinity;
   for (const k in obj) if (obj[k] > max) { max = obj[k]; best = k; }
   return best;
-}
+};
 
 // Expert
 const maxKey = obj =>
@@ -851,10 +851,10 @@ const maxKey = obj =>
 ### 52. Is object empty?
 ```js
 // Beginner
-function isEmpty(obj) {
+const isEmpty = obj => {
   for (const k in obj) return false;
   return true;
-}
+};
 
 // Expert
 const isEmpty = obj => Object.keys(obj).length === 0;
@@ -864,11 +864,11 @@ const isEmpty = obj => Object.keys(obj).length === 0;
 ### 53. Sum numeric values
 ```js
 // Beginner
-function sumValues(obj) {
+const sumValues = obj => {
   let total = 0;
   for (const k in obj) total += obj[k];
   return total;
-}
+};
 
 // Expert
 const sumValues = obj => Object.values(obj).reduce((a, b) => a + b, 0);
@@ -878,11 +878,11 @@ const sumValues = obj => Object.values(obj).reduce((a, b) => a + b, 0);
 ### 54. Remove a key (no mutation)
 ```js
 // Beginner
-function removeKey(obj, key) {
+const removeKey = (obj, key) => {
   const out = {};
   for (const k in obj) if (k !== key) out[k] = obj[k];
   return out;
-}
+};
 
 // Expert — destructuring rest
 const removeKey = (obj, key) => {
@@ -895,7 +895,7 @@ const removeKey = (obj, key) => {
 ### 55. Group array of objects by property
 ```js
 // Beginner
-function groupBy(arr, prop) {
+const groupBy = (arr, prop) => {
   const out = {};
   for (const item of arr) {
     const key = item[prop];
@@ -903,7 +903,7 @@ function groupBy(arr, prop) {
     out[key].push(item);
   }
   return out;
-}
+};
 
 // Expert
 const groupBy = (arr, prop) =>
@@ -917,11 +917,11 @@ const groupBy = (arr, prop) =>
 ### 56. Dedupe with Set
 ```js
 // Beginner
-function dedupe(arr) {
+const dedupe = arr => {
   const out = [];
   for (const x of arr) if (!out.includes(x)) out.push(x);
   return out;
-}
+};
 
 // Expert
 const dedupe = arr => [...new Set(arr)];
@@ -931,11 +931,11 @@ const dedupe = arr => [...new Set(arr)];
 ### 57. Common elements via Set
 ```js
 // Beginner
-function common(a, b) {
+const common = (a, b) => {
   const out = [];
   for (const x of a) if (b.includes(x)) out.push(x);
   return out;
-}
+};
 
 // Expert
 const common = (a, b) => {
@@ -948,11 +948,11 @@ const common = (a, b) => {
 ### 58. Count unique values
 ```js
 // Beginner
-function countUnique(arr) {
+const countUnique = arr => {
   const seen = [];
   for (const x of arr) if (!seen.includes(x)) seen.push(x);
   return seen.length;
-}
+};
 
 // Expert
 const countUnique = arr => new Set(arr).size;
@@ -962,11 +962,11 @@ const countUnique = arr => new Set(arr).size;
 ### 59. Pairs → object
 ```js
 // Beginner
-function toObject(pairs) {
+const toObject = pairs => {
   const out = {};
   for (const [k, v] of pairs) out[k] = v;
   return out;
-}
+};
 
 // Expert
 const toObject = pairs => Object.fromEntries(pairs);
@@ -976,11 +976,11 @@ const toObject = pairs => Object.fromEntries(pairs);
 ### 60. Keys that differ in value
 ```js
 // Beginner
-function diffKeys(a, b) {
+const diffKeys = (a, b) => {
   const out = [];
   for (const k in a) if (a[k] !== b[k]) out.push(k);
   return out;
-}
+};
 
 // Expert
 const diffKeys = (a, b) => Object.keys(a).filter(k => a[k] !== b[k]);
@@ -994,10 +994,10 @@ const diffKeys = (a, b) => Object.keys(a).filter(k => a[k] !== b[k]);
 ### 61. Even or odd
 ```js
 // Beginner
-function evenOrOdd(n) {
+const evenOrOdd = n => {
   if (n % 2 === 0) return "even";
   return "odd";
-}
+};
 
 // Expert
 const evenOrOdd = n => (n % 2 === 0 ? "even" : "odd");
@@ -1007,29 +1007,29 @@ const evenOrOdd = n => (n % 2 === 0 ? "even" : "odd");
 ### 62. Prime check
 ```js
 // Beginner
-function isPrime(n) {
+const isPrime = n => {
   if (n < 2) return false;
   for (let i = 2; i < n; i++) if (n % i === 0) return false;
   return true;
-}
+};
 
 // Expert — only check up to sqrt(n)
-function isPrime(n) {
+const isPrime = n => {
   if (n < 2) return false;
   for (let i = 2; i * i <= n; i++) if (n % i === 0) return false;
   return true;
-}
+};
 ```
 **Why:** A factor larger than √n pairs with one smaller — so checking to √n is enough. Much faster.
 
 ### 63. Factorial (loop)
 ```js
 // Beginner
-function factorial(n) {
+const factorial = n => {
   let result = 1;
   for (let i = 2; i <= n; i++) result *= i;
   return result;
-}
+};
 
 // Expert
 const factorial = n => Array.from({ length: n }, (_, i) => i + 1).reduce((a, b) => a * b, 1);
@@ -1039,100 +1039,100 @@ const factorial = n => Array.from({ length: n }, (_, i) => i + 1).reduce((a, b) 
 ### 64. Fibonacci up to N terms
 ```js
 // Beginner
-function fib(n) {
+const fib = n => {
   const out = [];
   for (let i = 0; i < n; i++) {
     if (i < 2) out.push(i);
     else out.push(out[i - 1] + out[i - 2]);
   }
   return out;
-}
+};
 
 // Expert — two variables, O(1) space per step
-function fib(n) {
+const fib = n => {
   const out = [];
   let a = 0, b = 1;
   for (let i = 0; i < n; i++) { out.push(a); [a, b] = [b, a + b]; }
   return out;
-}
+};
 ```
 **Why:** Expert avoids indexing back into the array; destructuring swap advances the pair.
 
 ### 65. Sum of digits
 ```js
 // Beginner
-function digitSum(n) {
+const digitSum = n => {
   let sum = 0;
   const str = String(n);
   for (const ch of str) sum += Number(ch);
   return sum;
-}
+};
 
 // Expert — math, no string conversion
-function digitSum(n) {
+const digitSum = n => {
   let sum = 0;
   n = Math.abs(n);
   while (n > 0) { sum += n % 10; n = Math.floor(n / 10); }
   return sum;
-}
+};
 ```
 **Why:** `% 10` grabs the last digit, `/10` drops it — the core digit-manipulation trick.
 
 ### 66. Reverse digits
 ```js
 // Beginner
-function reverseNum(n) {
+const reverseNum = n => {
   return Number(String(n).split("").reverse().join(""));
-}
+};
 
 // Expert — math
-function reverseNum(n) {
+const reverseNum = n => {
   let rev = 0;
   while (n > 0) { rev = rev * 10 + (n % 10); n = Math.floor(n / 10); }
   return rev;
-}
+};
 ```
 **Why:** `rev*10 + lastDigit` builds the reversed number — the digit-building pattern.
 
 ### 67. Number palindrome
 ```js
 // Beginner
-function isNumPalindrome(n) {
+const isNumPalindrome = n => {
   const s = String(n);
   return s === s.split("").reverse().join("");
-}
+};
 
 // Expert — reuse reverse-digits math
-function isNumPalindrome(n) {
+const isNumPalindrome = n => {
   let original = n, rev = 0;
   while (n > 0) { rev = rev * 10 + (n % 10); n = Math.floor(n / 10); }
   return rev === original;
-}
+};
 ```
 **Why:** Reverse and compare — no string conversion needed.
 
 ### 68. GCD
 ```js
 // Beginner
-function gcd(a, b) {
+const gcd = (a, b) => {
   let small = Math.min(a, b), g = 1;
   for (let i = 1; i <= small; i++) if (a % i === 0 && b % i === 0) g = i;
   return g;
-}
+};
 
 // Expert — Euclid's algorithm, O(log n)
-function gcd(a, b) {
+const gcd = (a, b) => {
   while (b) [a, b] = [b, a % b];
   return a;
-}
+};
 ```
 **Why:** Euclid's algorithm is dramatically faster and a must-know.
 
 ### 69. Celsius ↔ Fahrenheit
 ```js
 // Beginner
-function cToF(c) { return c * 9 / 5 + 32; }
-function fToC(f) { return (f - 32) * 5 / 9; }
+const cToF = c => c * 9 / 5 + 32;
+const fToC = f => (f - 32) * 5 / 9;
 
 // Expert (same math, arrow form)
 const cToF = c => (c * 9) / 5 + 32;
@@ -1143,7 +1143,7 @@ const fToC = f => ((f - 32) * 5) / 9;
 ### 70. Primes up to N
 ```js
 // Beginner
-function primesUpTo(n) {
+const primesUpTo = n => {
   const out = [];
   for (let i = 2; i <= n; i++) {
     let prime = true;
@@ -1151,26 +1151,26 @@ function primesUpTo(n) {
     if (prime) out.push(i);
   }
   return out;
-}
+};
 
 // Expert — Sieve of Eratosthenes, O(n log log n)
-function primesUpTo(n) {
+const primesUpTo = n => {
   const sieve = new Array(n + 1).fill(true);
   sieve[0] = sieve[1] = false;
   for (let i = 2; i * i <= n; i++)
     if (sieve[i]) for (let j = i * i; j <= n; j += i) sieve[j] = false;
   return sieve.flatMap((isP, i) => (isP ? [i] : []));
-}
+};
 ```
 **Why:** The Sieve marks multiples once — far faster than testing each number.
 
 ### 71. Perfect square?
 ```js
 // Beginner
-function isPerfectSquare(n) {
+const isPerfectSquare = n => {
   for (let i = 0; i * i <= n; i++) if (i * i === n) return true;
   return false;
-}
+};
 
 // Expert
 const isPerfectSquare = n => Number.isInteger(Math.sqrt(n));
@@ -1180,51 +1180,51 @@ const isPerfectSquare = n => Number.isInteger(Math.sqrt(n));
 ### 72. Count digits
 ```js
 // Beginner
-function digitCount(n) {
+const digitCount = n => {
   return String(Math.abs(n)).length;
-}
+};
 
 // Expert — math
-function digitCount(n) {
+const digitCount = n => {
   n = Math.abs(n);
   if (n === 0) return 1;
   let count = 0;
   while (n > 0) { count++; n = Math.floor(n / 10); }
   return count;
-}
+};
 ```
 **Why:** String length is simplest; math version avoids conversion.
 
 ### 73. Largest digit
 ```js
 // Beginner
-function largestDigit(n) {
+const largestDigit = n => {
   const digits = String(Math.abs(n)).split("");
   let max = 0;
   for (const d of digits) if (Number(d) > max) max = Number(d);
   return max;
-}
+};
 
 // Expert — math
-function largestDigit(n) {
+const largestDigit = n => {
   n = Math.abs(n);
   let max = 0;
   while (n > 0) { max = Math.max(max, n % 10); n = Math.floor(n / 10); }
   return max;
-}
+};
 ```
 **Why:** `% 10` per digit with a running max — no string split.
 
 ### 74. Armstrong number
 ```js
 // Beginner
-function isArmstrong(n) {
+const isArmstrong = n => {
   const digits = String(n).split("");
   const power = digits.length;
   let sum = 0;
   for (const d of digits) sum += Number(d) ** power;
   return sum === n;
-}
+};
 
 // Expert
 const isArmstrong = n => {
@@ -1237,10 +1237,10 @@ const isArmstrong = n => {
 ### 75. Round to N decimals
 ```js
 // Beginner
-function round(n, places) {
+const round = (n, places) => {
   const factor = 10 ** places;
   return Math.round(n * factor) / factor;
-}
+};
 
 // Expert
 const round = (n, places) => Number(n.toFixed(places));
@@ -1254,9 +1254,9 @@ const round = (n, places) => Number(n.toFixed(places));
 ### 76. Print 1 to N
 ```js
 // Beginner
-function printN(n) {
+const printN = n => {
   for (let i = 1; i <= n; i++) console.log(i);
-}
+};
 
 // Expert
 const printN = n => Array.from({ length: n }, (_, i) => i + 1).forEach(x => console.log(x));
@@ -1266,9 +1266,9 @@ const printN = n => Array.from({ length: n }, (_, i) => i + 1).forEach(x => cons
 ### 77. Multiplication table
 ```js
 // Beginner
-function table(n) {
+const table = n => {
   for (let i = 1; i <= 10; i++) console.log(`${n} x ${i} = ${n * i}`);
-}
+};
 
 // Expert
 const table = n =>
@@ -1279,54 +1279,54 @@ const table = n =>
 ### 78. FizzBuzz
 ```js
 // Beginner
-function fizzBuzz(n) {
+const fizzBuzz = n => {
   for (let i = 1; i <= n; i++) {
     if (i % 3 === 0 && i % 5 === 0) console.log("FizzBuzz");
     else if (i % 3 === 0) console.log("Fizz");
     else if (i % 5 === 0) console.log("Buzz");
     else console.log(i);
   }
-}
+};
 
 // Expert — build the string
-function fizzBuzz(n) {
+const fizzBuzz = n => {
   for (let i = 1; i <= n; i++) {
     let out = "";
     if (i % 3 === 0) out += "Fizz";
     if (i % 5 === 0) out += "Buzz";
     console.log(out || i);
   }
-}
+};
 ```
 **Why:** Expert avoids the combined condition — appending scales to more rules cleanly.
 
 ### 79. Right triangle of stars
 ```js
 // Beginner
-function triangle(n) {
+const triangle = n => {
   for (let i = 1; i <= n; i++) {
     let row = "";
     for (let j = 0; j < i; j++) row += "*";
     console.log(row);
   }
-}
+};
 
 // Expert
-function triangle(n) {
+const triangle = n => {
   for (let i = 1; i <= n; i++) console.log("*".repeat(i));
-}
+};
 ```
 **Why:** `"*".repeat(i)` replaces the inner loop.
 
 ### 80. 1 to 100 skipping multiples of 7
 ```js
 // Beginner
-function skip7() {
+const skip7 = () => {
   for (let i = 1; i <= 100; i++) {
     if (i % 7 === 0) continue;
     console.log(i);
   }
-}
+};
 
 // Expert
 const skip7 = () =>
@@ -1337,26 +1337,26 @@ const skip7 = () =>
 ### 81. Sum evens 1..N
 ```js
 // Beginner
-function sumEvens(n) {
+const sumEvens = n => {
   let sum = 0;
   for (let i = 2; i <= n; i += 2) sum += i;
   return sum;
-}
+};
 
 // Expert — arithmetic formula, O(1)
-function sumEvens(n) {
+const sumEvens = n => {
   const count = Math.floor(n / 2);
   return count * (count + 1);
-}
+};
 ```
 **Why:** Sum of first k evens = k(k+1). O(1) instead of looping.
 
 ### 82. Countdown N to 1
 ```js
 // Beginner
-function countdown(n) {
+const countdown = n => {
   for (let i = n; i >= 1; i--) console.log(i);
-}
+};
 
 // Expert
 const countdown = n =>
@@ -1367,11 +1367,11 @@ const countdown = n =>
 ### 83. Sum of first N naturals
 ```js
 // Beginner
-function sumNaturals(n) {
+const sumNaturals = n => {
   let sum = 0;
   for (let i = 1; i <= n; i++) sum += i;
   return sum;
-}
+};
 
 // Expert — Gauss formula, O(1)
 const sumNaturals = n => (n * (n + 1)) / 2;
@@ -1381,43 +1381,43 @@ const sumNaturals = n => (n * (n + 1)) / 2;
 ### 84. Prime status 1..N
 ```js
 // Beginner
-function primeStatus(n) {
+const primeStatus = n => {
   for (let i = 1; i <= n; i++) {
     let prime = i >= 2;
     for (let j = 2; j < i; j++) if (i % j === 0) { prime = false; break; }
     console.log(`${i}: ${prime}`);
   }
-}
+};
 
 // Expert — reuse sqrt prime check
-function isPrime(x) {
+const isPrime = x => {
   if (x < 2) return false;
   for (let i = 2; i * i <= x; i++) if (x % i === 0) return false;
   return true;
-}
-function primeStatus(n) {
+};
+const primeStatus = n => {
   for (let i = 1; i <= n; i++) console.log(`${i}: ${isPrime(i)}`);
-}
+};
 ```
 **Why:** Extracting `isPrime` (reusable) + √n check = cleaner and faster.
 
 ### 85. Pyramid pattern
 ```js
 // Beginner
-function pyramid(n) {
+const pyramid = n => {
   for (let i = 1; i <= n; i++) {
     let row = "";
     for (let s = 0; s < n - i; s++) row += " ";
     for (let star = 0; star < 2 * i - 1; star++) row += "*";
     console.log(row);
   }
-}
+};
 
 // Expert
-function pyramid(n) {
+const pyramid = n => {
   for (let i = 1; i <= n; i++)
     console.log(" ".repeat(n - i) + "*".repeat(2 * i - 1));
-}
+};
 ```
 **Why:** `repeat` replaces both inner loops; the math (`n-i` spaces, `2i-1` stars) stays the same.
 
@@ -1438,11 +1438,11 @@ const square = n => n * n;
 ### 87. Call a callback 3 times
 ```js
 // Beginner
-function callThrice(cb) {
+const callThrice = cb => {
   cb();
   cb();
   cb();
-}
+};
 
 // Expert
 const callThrice = cb => { for (let i = 0; i < 3; i++) cb(i); };
@@ -1452,82 +1452,82 @@ const callThrice = cb => { for (let i = 0; i < 3; i++) cb(i); };
 ### 88. Implement map
 ```js
 // Beginner
-function myMap(arr, fn) {
+const myMap = (arr, fn) => {
   const out = [];
   for (let i = 0; i < arr.length; i++) out.push(fn(arr[i]));
   return out;
-}
+};
 
 // Expert — pass index and array like the real map
-function myMap(arr, fn) {
+const myMap = (arr, fn) => {
   const out = [];
   for (let i = 0; i < arr.length; i++) out.push(fn(arr[i], i, arr));
   return out;
-}
+};
 ```
 **Why:** Real `map` gives the callback `(element, index, array)` — matching that is more complete.
 
 ### 89. Implement filter
 ```js
 // Beginner
-function myFilter(arr, fn) {
+const myFilter = (arr, fn) => {
   const out = [];
   for (let i = 0; i < arr.length; i++) if (fn(arr[i])) out.push(arr[i]);
   return out;
-}
+};
 
 // Expert
-function myFilter(arr, fn) {
+const myFilter = (arr, fn) => {
   const out = [];
   for (let i = 0; i < arr.length; i++) if (fn(arr[i], i, arr)) out.push(arr[i]);
   return out;
-}
+};
 ```
 **Why:** Same completeness note — pass index & array to the predicate.
 
 ### 90. Implement reduce
 ```js
 // Beginner
-function myReduce(arr, fn, initial) {
+const myReduce = (arr, fn, initial) => {
   let acc = initial;
   for (let i = 0; i < arr.length; i++) acc = fn(acc, arr[i]);
   return acc;
-}
+};
 
 // Expert — handle missing initial value like real reduce
-function myReduce(arr, fn, initial) {
+const myReduce = (arr, fn, initial) => {
   let acc = initial;
   let start = 0;
   if (initial === undefined) { acc = arr[0]; start = 1; }
   for (let i = start; i < arr.length; i++) acc = fn(acc, arr[i], i, arr);
   return acc;
-}
+};
 ```
 **Why:** Real `reduce` uses the first element as the seed when no initial value is given — the expert version replicates that edge case.
 
 ### 91. Sum array with recursion
 ```js
 // Beginner
-function sumRec(arr) {
+const sumRec = arr => {
   if (arr.length === 0) return 0;          // base case
   return arr[0] + sumRec(arr.slice(1));    // recursive case
-}
+};
 
 // Expert — index-based, avoids slicing (no array copies)
-function sumRec(arr, i = 0) {
+const sumRec = (arr, i = 0) => {
   if (i === arr.length) return 0;
   return arr[i] + sumRec(arr, i + 1);
-}
+};
 ```
 **Why:** `slice` copies the array each call (O(n²) total); passing an index is O(n).
 
 ### 92. Reverse string with recursion
 ```js
 // Beginner
-function reverseRec(str) {
+const reverseRec = str => {
   if (str === "") return "";
   return reverseRec(str.slice(1)) + str[0];
-}
+};
 
 // Expert
 const reverseRec = str => (str ? reverseRec(str.slice(1)) + str[0] : "");
@@ -1537,10 +1537,10 @@ const reverseRec = str => (str ? reverseRec(str.slice(1)) + str[0] : "");
 ### 93. Factorial with recursion
 ```js
 // Beginner
-function factRec(n) {
+const factRec = n => {
   if (n <= 1) return 1;         // base case
   return n * factRec(n - 1);    // recursive case
-}
+};
 
 // Expert (tail-style)
 const factRec = (n, acc = 1) => (n <= 1 ? acc : factRec(n - 1, acc * n));
@@ -1550,14 +1550,14 @@ const factRec = (n, acc = 1) => (n <= 1 ? acc : factRec(n - 1, acc * n));
 ### 94. Flatten any depth
 ```js
 // Beginner
-function flattenDeep(arr) {
+const flattenDeep = arr => {
   let out = [];
   for (const item of arr) {
     if (Array.isArray(item)) out = out.concat(flattenDeep(item));
     else out.push(item);
   }
   return out;
-}
+};
 
 // Expert
 const flattenDeep = arr =>
@@ -1585,13 +1585,13 @@ const add = a => b => c => a + b + c;
 ### 96. Debounce
 ```js
 // Beginner / standard
-function debounce(fn, delay) {
+const debounce = (fn, delay) => {
   let timer;
-  return function (...args) {
+  return (...args) => {
     clearTimeout(timer);                       // cancel previous
     timer = setTimeout(() => fn(...args), delay); // schedule new
   };
-}
+};
 
 // Usage
 const log = debounce(() => console.log("ran"), 300);
@@ -1602,15 +1602,15 @@ log(); log(); log();   // only runs once, 300ms after the last call
 ### 97. Memoize
 ```js
 // Beginner / standard
-function memoize(fn) {
+const memoize = fn => {
   const cache = {};
-  return function (n) {
+  return n => {
     if (n in cache) return cache[n];     // return cached
     const result = fn(n);
     cache[n] = result;                   // store
     return result;
   };
-}
+};
 
 // Usage
 const slowSquare = n => { for (let i = 0; i < 1e6; i++) {} return n * n; };
@@ -1623,14 +1623,14 @@ fast(5); // instant (cached)
 ### 98. Count target in nested array (recursion)
 ```js
 // Beginner
-function countNested(arr, target) {
+const countNested = (arr, target) => {
   let count = 0;
   for (const item of arr) {
     if (Array.isArray(item)) count += countNested(item, target);
     else if (item === target) count++;
   }
   return count;
-}
+};
 
 // Expert
 const countNested = (arr, target) =>
