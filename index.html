@@ -401,6 +401,8 @@
     $('#ansCode').textContent = s.code;   // textContent = safe, keeps exact formatting
     $('#ansWhy').innerHTML = s.why ? renderText(s.why) : '';
     $('#ansWhy').style.display = s.why ? '' : 'none';
+    // always collapse the answer when switching problems
+    hideAnswer();
   }
 
   function toggleAnswer() {
