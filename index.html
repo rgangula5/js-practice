@@ -179,7 +179,7 @@
   </main>
 </div>
 
-<script src="problems.js"></script>
+<script src="problems.js?v=3"></script>
 <script>
   let currentId = 1;
   let filterDiff = 'All';
@@ -214,8 +214,9 @@
       }
       const el = document.createElement('div');
       el.className = 'item' + (p.id === currentId ? ' active' : '') + (isDone(p.id) ? ' done' : '');
+      const d = p.difficulty || '';
       el.innerHTML = '<span class="num">' + p.id + '</span><span class="txt"></span>' +
-        '<span class="diff ' + p.difficulty + '">' + p.difficulty + '</span>';
+        (d ? '<span class="diff ' + d + '">' + d + '</span>' : '');
       el.querySelector('.txt').textContent = stripCode(p.text);
       el.onclick = () => { selectProblem(p.id); document.querySelector('aside').classList.remove('open'); };
       list.appendChild(el);
@@ -237,8 +238,9 @@
     const p = PROBLEMS.find((x) => x.id === id);
     $('#pnum').textContent = '#' + p.id;
     const db = $('#pdiff');
-    db.textContent = p.difficulty;
-    db.className = 'diff ' + p.difficulty;
+    db.textContent = p.difficulty || '';
+    db.className = 'diff ' + (p.difficulty || '');
+    db.style.display = p.difficulty ? '' : 'none';
     $('#ptext').innerHTML = renderText(p.text);
     const saved = localStorage.getItem(codeKey(id));
     $('#code').value = saved != null ? saved : starter(p);
