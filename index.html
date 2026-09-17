@@ -327,17 +327,15 @@
       return s.outerHTML;
     }).join('');
     tipEl.textContent = c.tip;
-    // remember user's open/closed preference across problems
-    const open = localStorage.getItem('jsp_concepts_open') === '1';
-    $('#conceptsPanel').hidden = !open;
-    $('#conceptsBtn').classList.toggle('open', open);
+    // always start collapsed when switching problems
+    $('#conceptsPanel').hidden = true;
+    $('#conceptsBtn').classList.remove('open');
   }
 
   function toggleConcepts() {
     const panel = $('#conceptsPanel');
     panel.hidden = !panel.hidden;
     $('#conceptsBtn').classList.toggle('open', !panel.hidden);
-    localStorage.setItem('jsp_concepts_open', panel.hidden ? '0' : '1');
   }
 
   function setFilterDiff(d) {
