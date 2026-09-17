@@ -1,0 +1,35 @@
+# JS Practice — 100 JavaScript Fundamentals
+
+100 hands-on JavaScript problems (arrays, strings, objects/Maps, math, loops, recursion) —
+the real prerequisites before LeetCode & DSA. Pure Node.js, no frameworks.
+
+## 🚀 Online compiler
+
+Solve all 100 problems right in your browser — pick a problem, write JS, hit **Run**, see the output.
+Progress and your code auto-save locally.
+
+**▶ https://rgangula5.github.io/js-practice/**
+
+## Files
+
+- **[PROBLEMS.md](PROBLEMS.md)** — the 100 problems, grouped into 6 sections.
+- **[SOLUTIONS.md](SOLUTIONS.md)** — a *beginner* and an *expert* solution for each.
+- **[index.html](index.html)** — the self-contained in-browser compiler (GitHub Pages).
+
+## Run locally with Node
+
+```bash
+# write your solution in a file, then:
+node file.js
+```
+
+## Sections
+
+1. Arrays (1–25)
+2. Strings (26–45)
+3. Objects / Maps / Sets (46–60)
+4. Math / Numbers (61–75)
+5. Loops / Logic / Patterns (76–85)
+6. Functions / Recursion / Higher-Order (86–100)
+
+When these feel easy, you're ready for **LeetCode Easy**. 🚀
