@@ -8,6 +8,10 @@ the real prerequisites before LeetCode & DSA. Pure Node.js, no frameworks.
 Solve all 100 problems right in your browser — pick a problem, write JS, hit **Run**, see the output.
 Filter by difficulty (**Easy · Medium · Hard**), and your progress and code auto-save locally.
 
+Each problem has a **💡 Concepts** button that reveals the techniques you should know to solve it the
+*expert* way (e.g. "prefix sum", "two-pointer", "frequency map"), plus a one-line expert insight —
+so you always know which concept you're actually practicing.
+
 > Difficulty mix: **62 Easy · 32 Medium · 6 Hard**. Each problem is tagged in
 > [PROBLEMS.md](PROBLEMS.md) and in the compiler.
 

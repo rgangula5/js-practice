@@ -94,6 +94,30 @@
     background: var(--bg); padding: 1px 6px; border-radius: 4px;
     font-family: var(--mono); font-size: 13px; color: var(--yellow);
   }
+  .prow { display: flex; align-items: flex-start; gap: 12px; }
+  .prow .ptext { flex: 1; }
+  .concepts-btn {
+    flex-shrink: 0; font-size: 12px; padding: 5px 12px; white-space: nowrap;
+    border-color: rgba(88,166,255,.4); color: var(--accent); background: rgba(88,166,255,.08);
+  }
+  .concepts-btn:hover { background: rgba(88,166,255,.16); }
+  .concepts-btn.open { background: var(--accent); color: #04121f; border-color: var(--accent); }
+  .concepts-panel {
+    margin-top: 12px; padding: 12px 14px; background: var(--panel); border: 1px solid var(--border);
+    border-left: 3px solid var(--accent); border-radius: 8px;
+  }
+  .cp-label {
+    font-size: 11px; text-transform: uppercase; letter-spacing: .5px; color: var(--muted);
+    font-weight: 600; margin-bottom: 8px;
+  }
+  .cp-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
+  .cp-tag {
+    font-size: 12px; font-family: var(--mono); padding: 3px 9px; border-radius: 6px;
+    background: rgba(88,166,255,.12); color: var(--accent); border: 1px solid rgba(88,166,255,.3);
+  }
+  .cp-tip { font-size: 13px; line-height: 1.55; color: var(--text); }
+  .cp-tip::before { content: "💡 "; }
+
   .editor-wrap { flex: 1; display: flex; flex-direction: column; min-height: 0; }
   .toolbar {
     padding: 8px 14px; display: flex; gap: 8px; align-items: center;
@@ -161,7 +185,15 @@
   </aside>
   <main>
     <div class="problem">
-      <div class="ptext"><span class="pnum" id="pnum">#1</span> <span class="diff" id="pdiff"></span> <span id="ptext"></span></div>
+      <div class="prow">
+        <div class="ptext"><span class="pnum" id="pnum">#1</span> <span class="diff" id="pdiff"></span> <span id="ptext"></span></div>
+        <button class="concepts-btn" id="conceptsBtn" onclick="toggleConcepts()">💡 Concepts</button>
+      </div>
+      <div class="concepts-panel" id="conceptsPanel" hidden>
+        <div class="cp-label">Concepts to know for the expert solution</div>
+        <div class="cp-tags" id="cpTags"></div>
+        <div class="cp-tip" id="cpTip"></div>
+      </div>
     </div>
     <div class="editor-wrap">
       <div class="toolbar">
@@ -180,6 +212,7 @@
 </div>
 
 <script src="problems.js?v=3"></script>
+<script src="concepts.js?v=1"></script>
 <script>
   let currentId = 1;
   let filterDiff = 'All';
@@ -242,6 +275,7 @@
     db.className = 'diff ' + (p.difficulty || '');
     db.style.display = p.difficulty ? '' : 'none';
     $('#ptext').innerHTML = renderText(p.text);
+    renderConcepts(p);
     const saved = localStorage.getItem(codeKey(id));
     $('#code').value = saved != null ? saved : starter(p);
     clearConsole();
@@ -276,6 +310,34 @@
     else d.push(currentId);
     setDone(d);
     updateDoneBtn(); updateProgress(); renderList($('#search').value);
+  }
+
+  function renderConcepts(p) {
+    const c = (typeof CONCEPTS !== 'undefined') ? CONCEPTS[p.id] : null;
+    const tagsEl = $('#cpTags'), tipEl = $('#cpTip');
+    if (!c) {
+      tagsEl.innerHTML = '';
+      tipEl.textContent = 'Concept notes coming soon for this one.';
+      return;
+    }
+    tagsEl.innerHTML = c.tags.map((t) => {
+      const s = document.createElement('span');
+      s.className = 'cp-tag';
+      s.textContent = t;
+      return s.outerHTML;
+    }).join('');
+    tipEl.textContent = c.tip;
+    // remember user's open/closed preference across problems
+    const open = localStorage.getItem('jsp_concepts_open') === '1';
+    $('#conceptsPanel').hidden = !open;
+    $('#conceptsBtn').classList.toggle('open', open);
+  }
+
+  function toggleConcepts() {
+    const panel = $('#conceptsPanel');
+    panel.hidden = !panel.hidden;
+    $('#conceptsBtn').classList.toggle('open', !panel.hidden);
+    localStorage.setItem('jsp_concepts_open', panel.hidden ? '0' : '1');
   }
 
   function setFilterDiff(d) {
