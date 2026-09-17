@@ -62,8 +62,25 @@
   .item.active { background: var(--panel2); border-left-color: var(--accent); }
   .item .num { color: var(--accent); font-weight: 600; flex-shrink: 0; min-width: 24px; }
   .item.done .num::after { content: " ✓"; color: var(--green); }
-  .item .txt { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .item .txt { color: var(--muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; flex: 1; }
   .item.active .txt { color: var(--text); }
+
+  /* Difficulty badges */
+  .diff {
+    font-size: 10px; font-weight: 700; padding: 1px 7px; border-radius: 20px;
+    text-transform: uppercase; letter-spacing: .4px; flex-shrink: 0; align-self: center;
+  }
+  .diff.Easy   { color: var(--green);  background: rgba(63,185,80,.15);  border: 1px solid rgba(63,185,80,.35); }
+  .diff.Medium { color: var(--yellow); background: rgba(210,153,34,.15);  border: 1px solid rgba(210,153,34,.35); }
+  .diff.Hard   { color: var(--red);    background: rgba(248,81,73,.15);   border: 1px solid rgba(248,81,73,.35); }
+
+  .filters { display: flex; gap: 6px; padding: 8px 8px 0; }
+  .chip {
+    flex: 1; text-align: center; font-size: 11px; padding: 5px 0; border-radius: 6px;
+    border: 1px solid var(--border); background: var(--bg); color: var(--muted); cursor: pointer;
+    font-weight: 600;
+  }
+  .chip.active { background: var(--panel2); color: var(--text); border-color: var(--accent); }
 
   /* Main */
   main { flex: 1; display: flex; flex-direction: column; min-width: 0; }
@@ -133,12 +150,18 @@
 </header>
 <div class="layout">
   <aside>
+    <div class="filters">
+      <div class="chip active" data-diff="All" onclick="setFilterDiff('All')">All</div>
+      <div class="chip" data-diff="Easy" onclick="setFilterDiff('Easy')">Easy</div>
+      <div class="chip" data-diff="Medium" onclick="setFilterDiff('Medium')">Medium</div>
+      <div class="chip" data-diff="Hard" onclick="setFilterDiff('Hard')">Hard</div>
+    </div>
     <div class="search"><input id="search" placeholder="Search problems…" /></div>
     <div class="list" id="list"></div>
   </aside>
   <main>
     <div class="problem">
-      <div class="ptext"><span class="pnum" id="pnum">#1</span> <span id="ptext"></span></div>
+      <div class="ptext"><span class="pnum" id="pnum">#1</span> <span class="diff" id="pdiff"></span> <span id="ptext"></span></div>
     </div>
     <div class="editor-wrap">
       <div class="toolbar">
@@ -159,6 +182,7 @@
 <script src="problems.js"></script>
 <script>
   let currentId = 1;
+  let filterDiff = 'All';
   const $ = (s) => document.querySelector(s);
   const codeKey = (id) => 'jsp_code_' + id;
   const doneKey = () => 'jsp_done';
@@ -179,6 +203,7 @@
     let lastSec = '';
     const f = filter.toLowerCase();
     PROBLEMS.forEach((p) => {
+      if (filterDiff !== 'All' && p.difficulty !== filterDiff) return;
       if (f && !(p.text.toLowerCase().includes(f) || String(p.id) === f)) return;
       if (p.section !== lastSec) {
         lastSec = p.section;
@@ -189,7 +214,8 @@
       }
       const el = document.createElement('div');
       el.className = 'item' + (p.id === currentId ? ' active' : '') + (isDone(p.id) ? ' done' : '');
-      el.innerHTML = '<span class="num">' + p.id + '</span><span class="txt"></span>';
+      el.innerHTML = '<span class="num">' + p.id + '</span><span class="txt"></span>' +
+        '<span class="diff ' + p.difficulty + '">' + p.difficulty + '</span>';
       el.querySelector('.txt').textContent = stripCode(p.text);
       el.onclick = () => { selectProblem(p.id); document.querySelector('aside').classList.remove('open'); };
       list.appendChild(el);
@@ -210,6 +236,9 @@
     currentId = id;
     const p = PROBLEMS.find((x) => x.id === id);
     $('#pnum').textContent = '#' + p.id;
+    const db = $('#pdiff');
+    db.textContent = p.difficulty;
+    db.className = 'diff ' + p.difficulty;
     $('#ptext').innerHTML = renderText(p.text);
     const saved = localStorage.getItem(codeKey(id));
     $('#code').value = saved != null ? saved : starter(p);
@@ -245,6 +274,13 @@
     else d.push(currentId);
     setDone(d);
     updateDoneBtn(); updateProgress(); renderList($('#search').value);
+  }
+
+  function setFilterDiff(d) {
+    filterDiff = d;
+    document.querySelectorAll('.chip').forEach((c) =>
+      c.classList.toggle('active', c.dataset.diff === d));
+    renderList($('#search').value);
   }
 
   function clearConsole() { $('#console').innerHTML = ''; }

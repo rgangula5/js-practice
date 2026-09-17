@@ -6,7 +6,10 @@ the real prerequisites before LeetCode & DSA. Pure Node.js, no frameworks.
 ## 🚀 Online compiler
 
 Solve all 100 problems right in your browser — pick a problem, write JS, hit **Run**, see the output.
-Progress and your code auto-save locally.
+Filter by difficulty (**Easy · Medium · Hard**), and your progress and code auto-save locally.
+
+> Difficulty mix: **62 Easy · 32 Medium · 6 Hard**. Each problem is tagged in
+> [PROBLEMS.md](PROBLEMS.md) and in the compiler.
 
 **▶ https://rgangula5.github.io/js-practice/**
 
