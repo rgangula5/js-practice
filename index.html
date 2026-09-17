@@ -138,6 +138,22 @@
     background: var(--bg); color: var(--text); font-family: var(--mono);
     font-size: 14px; line-height: 1.6; padding: 14px 18px; tab-size: 2;
   }
+  .ac-pop {
+    position: fixed; z-index: 60; background: var(--panel2); border: 1px solid var(--border);
+    border-radius: 6px; box-shadow: 0 6px 20px rgba(0,0,0,.5); overflow: hidden;
+    font-family: var(--mono); font-size: 13px; max-height: 200px; overflow-y: auto; display: none;
+  }
+  .ac-pop.show { display: block; }
+  .ac-item { padding: 4px 12px 4px 10px; cursor: pointer; white-space: nowrap; display: flex; gap: 8px; align-items: center; }
+  .ac-item .ac-name { color: var(--text); }
+  .ac-item .ac-kind { color: var(--muted); font-size: 10px; margin-left: auto; text-transform: uppercase; }
+  .ac-item.sel { background: var(--accent); }
+  .ac-item.sel .ac-name { color: #04121f; }
+  .ac-item.sel .ac-kind { color: rgba(4,18,31,.7); }
+  .ac-hint-tab {
+    position: fixed; z-index: 61; background: var(--panel); border: 1px solid var(--border);
+    color: var(--muted); font-size: 10px; padding: 1px 6px; border-radius: 4px; display: none;
+  }
   .output {
     height: 34%; min-height: 120px; background: #010409; border-top: 1px solid var(--border);
     display: flex; flex-direction: column; flex-shrink: 0;
@@ -239,6 +255,7 @@
         <span class="hint">Code auto-saves in your browser</span>
       </div>
       <textarea id="code" spellcheck="false" placeholder="// Write your solution here, then click Run"></textarea>
+      <div class="ac-pop" id="acPop"></div>
       <div class="output">
         <div class="ohead">Console <span class="clear" onclick="clearConsole()">clear</span></div>
         <div id="console"></div>
@@ -331,6 +348,7 @@
     updateDoneBtn();
     renderList($('#search').value);
     localStorage.setItem('jsp_last', id);
+    if (typeof hideAC === 'function') hideAC();
     $('#code').focus();
   }
 
@@ -470,15 +488,125 @@
     }
   }
 
+  /* ---------- Autocomplete ---------- */
+  const JS_BUILTINS = ['const','let','var','function','return','if','else','for','while','do','switch','case','break','continue','new','class','extends','super','this','typeof','instanceof','of','in','try','catch','finally','throw','await','async','yield','true','false','null','undefined','console','log','error','warn','Math','max','min','floor','ceil','round','abs','sqrt','pow','random','Number','isInteger','isNaN','parseInt','parseFloat','String','Array','isArray','from','Object','keys','values','entries','fromEntries','assign','JSON','stringify','parse','Set','Map','Promise','all','race','resolve','reject','length','push','pop','shift','unshift','slice','splice','concat','map','filter','reduce','reduceRight','forEach','find','findIndex','some','every','includes','indexOf','lastIndexOf','join','split','sort','reverse','flat','flatMap','fill','repeat','padStart','padEnd','trim','toUpperCase','toLowerCase','charAt','charCodeAt','fromCharCode','replace','replaceAll','match','startsWith','endsWith','substring','has','get','add','delete','size','toFixed','setTimeout'];
+  const acPop = $('#acPop');
+  let acItems = [], acSel = 0, acStart = 0, acOpen = false;
+
+  function collectIdents(code) {
+    const set = new Set();
+    let m;
+    const push = (s) => { if (s && /^[A-Za-z_$][\w$]*$/.test(s)) set.add(s); };
+    const declRe = /\b(?:const|let|var|function|class)\s+([A-Za-z_$][\w$]*)/g;
+    while ((m = declRe.exec(code))) push(m[1]);
+    // function/arrow param lists
+    const parenRe = /(?:function\s*[\w$]*\s*|\b)\(([^()]*)\)\s*(?:=>|\{)/g;
+    while ((m = parenRe.exec(code))) m[1].split(',').forEach(p => push(p.trim().replace(/[:=].*$/, '').replace(/[.\s]/g, '').replace(/[{}\[\]]/g, '')));
+    // single-arg arrow: x =>
+    const arrowRe = /([A-Za-z_$][\w$]*)\s*=>/g;
+    while ((m = arrowRe.exec(code))) push(m[1]);
+    // for (const x  /  for (let [a,b]
+    const forRe = /for\s*\(\s*(?:const|let|var)\s+([A-Za-z_$][\w$]*)/g;
+    while ((m = forRe.exec(code))) push(m[1]);
+    return set;
+  }
+
+  function currentToken(ta) {
+    const upto = ta.value.slice(0, ta.selectionStart);
+    const mm = upto.match(/[\w$]+$/);
+    return mm ? { text: mm[0], start: ta.selectionStart - mm[0].length } : { text: '', start: ta.selectionStart };
+  }
+
+  function updateAutocomplete() {
+    const ta = $('#code');
+    const tok = currentToken(ta);
+    if (tok.text.length < 1 || ta.selectionStart !== ta.selectionEnd) { hideAC(); return; }
+    const declared = collectIdents(ta.value);
+    const pool = new Set([...declared, ...JS_BUILTINS]);
+    const low = tok.text.toLowerCase();
+    const declaredSet = declared;
+    const matches = [...pool]
+      .filter(w => w.toLowerCase().startsWith(low) && w !== tok.text)
+      .sort((a, b) => {
+        const da = declaredSet.has(a), db = declaredSet.has(b);
+        if (da !== db) return da ? -1 : 1;          // your variables first
+        return a.length - b.length || a.localeCompare(b);
+      })
+      .slice(0, 8);
+    if (!matches.length) { hideAC(); return; }
+    acItems = matches; acSel = 0; acStart = tok.start; acOpen = true;
+    renderAC(declaredSet);
+    positionAC(ta);
+  }
+
+  function renderAC(declaredSet) {
+    acPop.innerHTML = '';
+    acItems.forEach((w, i) => {
+      const it = document.createElement('div');
+      it.className = 'ac-item' + (i === acSel ? ' sel' : '');
+      it.innerHTML = '<span class="ac-name"></span><span class="ac-kind">' + (declaredSet.has(w) ? 'var' : 'js') + '</span>';
+      it.querySelector('.ac-name').textContent = w;
+      it.onmousedown = (e) => { e.preventDefault(); acSel = i; acceptAC(); };
+      acPop.appendChild(it);
+    });
+    acPop.classList.add('show');
+  }
+
+  function positionAC(ta) {
+    const c = caretCoords(ta, ta.selectionStart);
+    acPop.style.left = c.left + 'px';
+    acPop.style.top = c.top + 'px';
+  }
+
+  function hideAC() { acOpen = false; acPop.classList.remove('show'); }
+
+  function acceptAC() {
+    if (!acOpen || !acItems.length) return;
+    const ta = $('#code');
+    const word = acItems[acSel];
+    const end = ta.selectionStart;
+    ta.value = ta.value.slice(0, acStart) + word + ta.value.slice(end);
+    const pos = acStart + word.length;
+    ta.selectionStart = ta.selectionEnd = pos;
+    hideAC(); saveCode();
+  }
+
+  // Measure caret pixel position (viewport coords) via a mirror div
+  function caretCoords(ta, pos) {
+    const div = document.createElement('div');
+    const s = getComputedStyle(ta);
+    ['fontFamily','fontSize','fontWeight','lineHeight','letterSpacing','textTransform','wordSpacing','paddingTop','paddingRight','paddingBottom','paddingLeft','borderTopWidth','borderRightWidth','borderBottomWidth','borderLeftWidth','boxSizing','tabSize'].forEach(k => div.style[k] = s[k]);
+    div.style.position = 'absolute'; div.style.visibility = 'hidden'; div.style.whiteSpace = 'pre-wrap';
+    div.style.wordWrap = 'break-word'; div.style.width = ta.clientWidth + 'px';
+    div.textContent = ta.value.slice(0, pos);
+    const span = document.createElement('span'); span.textContent = ta.value.slice(pos) || '.';
+    div.appendChild(span);
+    document.body.appendChild(div);
+    const rect = ta.getBoundingClientRect();
+    const left = rect.left + span.offsetLeft - ta.scrollLeft;
+    const top = rect.top + span.offsetTop - ta.scrollTop + (parseFloat(s.lineHeight) || 20);
+    document.body.removeChild(div);
+    // keep within viewport
+    return { left: Math.min(left, window.innerWidth - 180), top: Math.min(top, window.innerHeight - 60) };
+  }
+
   // events
   $('#search').addEventListener('input', (e) => renderList(e.target.value));
+  $('#code').addEventListener('input', updateAutocomplete);
+  $('#code').addEventListener('blur', () => setTimeout(hideAC, 120));
   $('#code').addEventListener('keydown', (e) => {
-    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); runCode(); }
+    if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') { e.preventDefault(); hideAC(); runCode(); return; }
+    if (acOpen) {
+      if (e.key === 'Tab' || e.key === 'Enter') { e.preventDefault(); acceptAC(); return; }
+      if (e.key === 'ArrowDown') { e.preventDefault(); acSel = (acSel + 1) % acItems.length; renderAC(collectIdents($('#code').value)); return; }
+      if (e.key === 'ArrowUp') { e.preventDefault(); acSel = (acSel - 1 + acItems.length) % acItems.length; renderAC(collectIdents($('#code').value)); return; }
+      if (e.key === 'Escape') { e.preventDefault(); hideAC(); return; }
+    }
     if (e.key === 'Tab') {
       e.preventDefault();
-      const el = e.target, s = el.selectionStart, en = el.selectionEnd;
-      el.value = el.value.slice(0, s) + '  ' + el.value.slice(en);
-      el.selectionStart = el.selectionEnd = s + 2;
+      const el = e.target, ss = el.selectionStart, en = el.selectionEnd;
+      el.value = el.value.slice(0, ss) + '  ' + el.value.slice(en);
+      el.selectionStart = el.selectionEnd = ss + 2;
     }
   });
   window.addEventListener('beforeunload', saveCode);
