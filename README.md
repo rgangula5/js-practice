@@ -12,6 +12,9 @@ Each problem has a **💡 Concepts** button that reveals the techniques you shou
 *expert* way (e.g. "prefix sum", "two-pointer", "frequency map"), plus a one-line expert insight —
 so you always know which concept you're actually practicing.
 
+A **📖 Show answer** button opens the full solution (beginner + expert versions and a *Why*) in a
+side panel on the right, with no word-wrapping so code lines stay intact.
+
 > Difficulty mix: **62 Easy · 32 Medium · 6 Hard**. Each problem is tagged in
 > [PROBLEMS.md](PROBLEMS.md) and in the compiler.
 

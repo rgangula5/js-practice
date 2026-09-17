@@ -157,7 +157,42 @@
   .log-warn { color: var(--yellow); }
   .log-info { color: var(--muted); }
   .log-ret { color: var(--green); }
+  /* Answer panel (right side) */
+  .ans-btn { border-color: rgba(210,153,34,.4); color: var(--yellow); background: rgba(210,153,34,.08); }
+  .ans-btn:hover { background: rgba(210,153,34,.16); }
+  .ans-btn.open { background: var(--yellow); color: #1a1200; border-color: var(--yellow); }
+  #answer {
+    width: 46%; min-width: 340px; max-width: 720px; flex-shrink: 0;
+    background: var(--panel); border-left: 1px solid var(--border);
+    display: flex; flex-direction: column; min-width: 0;
+  }
+  #answer[hidden] { display: none; }
+  .ans-head {
+    display: flex; align-items: center; gap: 8px; padding: 8px 12px;
+    background: var(--panel2); border-bottom: 1px solid var(--border); flex-shrink: 0;
+  }
+  .ans-title { font-size: 13px; font-weight: 600; }
+  .ans-num { color: var(--accent); font-weight: 700; }
+  .ans-head .ans-copy { margin-left: auto; font-size: 12px; padding: 4px 10px; }
+  .ans-head .ans-close { font-size: 13px; padding: 4px 9px; }
+  .ans-body { flex: 1; overflow-y: auto; display: flex; flex-direction: column; min-height: 0; }
+  .ans-code {
+    margin: 0; padding: 14px 16px; background: var(--bg); flex: 1;
+    font-family: var(--mono); font-size: 13px; line-height: 1.6;
+    white-space: pre;            /* NO word wrapping */
+    overflow-x: auto;            /* horizontal scroll for long lines */
+    tab-size: 2; color: var(--text);
+  }
+  .ans-code code { white-space: pre; font-family: inherit; }
+  .ans-why {
+    padding: 12px 16px; font-size: 13px; line-height: 1.55; color: var(--text);
+    border-top: 1px solid var(--border); background: var(--panel);
+  }
+  .ans-why::before { content: "Why "; color: var(--muted); font-weight: 600; }
+  .ans-why code { background: var(--bg); padding: 1px 5px; border-radius: 4px; font-family: var(--mono); font-size: 12px; color: var(--yellow); }
+
   @media (max-width: 720px) {
+    #answer { width: 100%; position: absolute; right: 0; top: 0; height: 100%; z-index: 20; }
     aside { width: 100%; position: absolute; z-index: 10; height: 100%; display: none; }
     aside.open { display: flex; }
     .menu-btn { display: inline-block !important; }
@@ -200,6 +235,7 @@
         <button class="run" onclick="runCode()">▶ Run (Ctrl/⌘+Enter)</button>
         <button onclick="resetCode()">Reset</button>
         <button class="done-btn" id="doneBtn" onclick="toggleDone()">Mark done</button>
+        <button class="ans-btn" id="ansBtn" onclick="toggleAnswer()">📖 Show answer</button>
         <span class="hint">Code auto-saves in your browser</span>
       </div>
       <textarea id="code" spellcheck="false" placeholder="// Write your solution here, then click Run"></textarea>
@@ -209,10 +245,22 @@
       </div>
     </div>
   </main>
+  <section id="answer" hidden>
+    <div class="ans-head">
+      <span class="ans-title">Solution <span id="ansNum" class="ans-num"></span></span>
+      <button class="ans-copy" onclick="copyAnswer()" title="Copy code">Copy</button>
+      <button class="ans-close" onclick="hideAnswer()" title="Close">✕</button>
+    </div>
+    <div class="ans-body">
+      <pre class="ans-code"><code id="ansCode"></code></pre>
+      <div class="ans-why" id="ansWhy"></div>
+    </div>
+  </section>
 </div>
 
 <script src="problems.js?v=3"></script>
 <script src="concepts.js?v=1"></script>
+<script src="solutions.js?v=1"></script>
 <script>
   let currentId = 1;
   let filterDiff = 'All';
@@ -276,6 +324,7 @@
     db.style.display = p.difficulty ? '' : 'none';
     $('#ptext').innerHTML = renderText(p.text);
     renderConcepts(p);
+    renderAnswer(p);
     const saved = localStorage.getItem(codeKey(id));
     $('#code').value = saved != null ? saved : starter(p);
     clearConsole();
@@ -336,6 +385,40 @@
     const panel = $('#conceptsPanel');
     panel.hidden = !panel.hidden;
     $('#conceptsBtn').classList.toggle('open', !panel.hidden);
+  }
+
+  let currentAnswerCode = '';
+  function renderAnswer(p) {
+    const s = (typeof SOLUTIONS !== 'undefined') ? SOLUTIONS[p.id] : null;
+    $('#ansNum').textContent = '#' + p.id;
+    if (!s) {
+      currentAnswerCode = '';
+      $('#ansCode').textContent = '// Solution coming soon.';
+      $('#ansWhy').innerHTML = '';
+      return;
+    }
+    currentAnswerCode = s.code;
+    $('#ansCode').textContent = s.code;   // textContent = safe, keeps exact formatting
+    $('#ansWhy').innerHTML = s.why ? renderText(s.why) : '';
+    $('#ansWhy').style.display = s.why ? '' : 'none';
+  }
+
+  function toggleAnswer() {
+    const a = $('#answer');
+    a.hidden = !a.hidden;
+    $('#ansBtn').classList.toggle('open', !a.hidden);
+  }
+  function hideAnswer() {
+    $('#answer').hidden = true;
+    $('#ansBtn').classList.remove('open');
+  }
+  function copyAnswer() {
+    if (!currentAnswerCode) return;
+    navigator.clipboard.writeText(currentAnswerCode).then(() => {
+      const b = document.querySelector('.ans-copy');
+      const t = b.textContent; b.textContent = 'Copied!';
+      setTimeout(() => { b.textContent = t; }, 1200);
+    }).catch(() => {});
   }
 
   function setFilterDiff(d) {
